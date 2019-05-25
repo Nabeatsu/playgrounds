@@ -1,31 +1,24 @@
-import UIKit
 import Foundation
 
-protocol Animal {}
-
-extension Animal {
-    func hoge() {
-        Playground.hoge(self)
+struct Pair<Value>: Sequence {
+    private var array: [Value]
+    
+    init(_ value1: Value, _ value2: Value) {
+        array = [value1, value2]
+    }
+    
+    var values: (Value, Value) { return (array[0], array[1]) }
+    
+    func makeIterator() -> IndexingIterator<[Value]> {
+        return array.makeIterator()
     }
 }
 
-func hoge<T>(_ value: T) where T: Animal {
-    print(value)
-}
-
-extension String: Animal {}
-
-struct AnimalStruct {
-    var a: Animal
-    init() { a = "Animal" }
-}
 
 
+let pair = Pair(1, 2)
 
-func hoge(_ animalStruct: AnimalStruct) {
-    hoge(animalStruct.a) // Protocol type 'Animal' cannot conform to 'Animal' because only concrete types can conform to protocols
-    // Existential が protocol自身にconfromしていないことが原因
-    // Animal protocolのextensionで定義したメソッドを経由してhoge<T>(_ value: T) where T: Animalを呼び出すとコンパイルが通る
-    animalStruct.a.hoge()
-}
+let hoge = pair.makeIterator()
+print(hoge)
+
 
